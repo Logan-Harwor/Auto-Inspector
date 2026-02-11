@@ -1,9 +1,9 @@
 const CACHE_NAME = 'auto-inspector-v1';
 const ASSETS = [
-    '/',
-    '/index.html',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-    'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Syne:wght@800&display=swap'
+    '/',               // This matches your index route
+    '/manifest.json',
+    '/icon-192.png',
+    '/icon-512.png'
 ];
 
 // Install Event
@@ -14,10 +14,13 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// Fetch Event
+// Fetch Event - This is where the 404 usually happens
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
-            .then((response) => response || fetch(event.request))
+            .then((response) => {
+                // Return the cached version, or try to get it from the network
+                return response || fetch(event.request);
+            })
     );
 });
