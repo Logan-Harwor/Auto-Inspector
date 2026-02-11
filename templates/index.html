@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Auto Inspector">
+    <meta name="description" content="Retro-Brutalist Car Inspection Hub. Quick access to JP Center, CarVX, ToyoDIY, and more.">
+    <meta name="theme-color" content="#fdfdfd">
+
+    <link rel="manifest" href="manifest.json">
+
+    <title>Auto Inspector // Retro-Brutalist Hub</title>
+    
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Syne:wght@800&display=swap" rel="stylesheet">
+
+    <style>
+        /* [Existing CSS remains exactly the same] */
+        :root {
+            --bg-color: #e0e0e0;
+            --card-bg: #ffffff;
+            --text-main: #000000;
+            --text-dim: #333333;
+            --accent-primary: #ff5c5c;
+            --accent-secondary: #4d96ff;
+            --accent-tertiary: #ffd93d;
+            --accent-quaternary: #6bcb77;
+            --accent-dark: #2d2d2d;
+            --border-width: 3px;
+            --border-color: #000000;
+            --shadow-offset: 5px;
+            --shadow-color: #000000;
+            --radius: 0px;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#000000 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            background: var(--card-bg);
+            border: var(--border-width) solid var(--border-color);
+            box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color);
+            padding: 2rem;
+            position: relative;
+        }
+        header {
+            margin-bottom: 2.5rem;
+            border-bottom: var(--border-width) solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin: 0;
+            color: var(--text-main);
+            text-shadow: 2px 2px 0px var(--accent-tertiary);
+        }
+        p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 10px;
+            background-color: var(--accent-tertiary);
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border: 2px solid var(--border-color);
+            transform: rotate(-1deg);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text-main);
+            border: var(--border-width) solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            box-shadow: 4px 4px 0px var(--shadow-color);
+        }
+        .card:hover, .card:focus {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px var(--shadow-color);
+            outline: none;
+        }
+        .card:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--shadow-color);
+        }
+        .icon-box {
+            background: var(--black);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--border-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        .card:nth-child(1) .icon-box { background-color: var(--accent-primary); color: var(--text-main); }
+        .card:nth-child(2) .icon-box { background-color: var(--accent-secondary); color: var(--text-main); }
+        .card:nth-child(3) .icon-box { background-color: var(--accent-tertiary); color: var(--text-main); }
+        .card:nth-child(4) .icon-box { background-color: var(--accent-quaternary); color: var(--text-main); }
+        .card:nth-child(5) .icon-box { background-color: var(--accent-dark); color: #ffffff; }
+
+        .card-content { text-align: left; width: 100%; }
+        .card span {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+            display: block;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+        .card:hover span { border-bottom: 2px solid var(--text-main); }
+        .card small {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1.3;
+            display: block;
+        }
+        .card.featured::after {
+            content: "POPULAR";
+            position: absolute;
+            top: -12px;
+            right: -10px;
+            background: var(--accent-primary);
+            color: white;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border: 2px solid var(--border-color);
+            transform: rotate(3deg);
+        }
+
+        /* --- PWA INSTALL BUTTON STYLES --- */
+        #install-btn-container {
+            display: none; /* Hidden by default */
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+        .install-btn {
+            width: 100%;
+            background-color: var(--accent-quaternary);
+            color: var(--text-main);
+            border: var(--border-width) solid var(--border-color);
+            padding: 1rem;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--shadow-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+        .install-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--shadow-color);
+        }
+
+        /* iOS Install Instructions */
+        #ios-install-prompt {
+            display: none;
+            background: var(--accent-tertiary);
+            border: var(--border-width) solid var(--border-color);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 4px 4px 0px var(--shadow-color);
+            text-align: left;
+        }
+        #ios-install-prompt strong { font-family: 'Syne', sans-serif; display: block; margin-bottom: 5px;}
+        #ios-install-prompt p { background: none; border: none; padding: 0; margin: 0; transform: none; display: block; }
+
+        @media (min-width: 600px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .card.featured { grid-column: span 2; }
+        }
+        @media (min-width: 900px) {
+            .grid { grid-template-columns: repeat(3, 1fr); }
+            .card.featured { grid-column: span 1; }
+            .container { padding: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<main class="container">
+    <header>
+        <h1>Auto Inspector</h1>
+        <p>RAW DATA // NO FLUFF</p>
+    </header>
+
+    <div id="install-btn-container">
+        <button id="install-btn" class="install-btn">
+            <i class="fa-solid fa-download"></i> Install App
+        </button>
+    </div>
+
+    <div id="ios-install-prompt">
+        <strong><i class="fa-brands fa-apple"></i> INSTALL ON IOS:</strong>
+        <p>1. Tap the <strong>Share</strong> button <i class="fa-solid fa-arrow-up-from-bracket"></i> below.</p>
+        <p>2. Select <strong>"Add to Home Screen"</strong> <i class="fa-regular fa-square-plus"></i>.</p>
+    </div>
+
+    <div class="grid">
+        <a href="https://jpcenter.ru/month" target="_blank" rel="noopener noreferrer" class="card featured" aria-label="JP Center">
+            <div class="icon-box" aria-hidden="true"><i class="fa-solid fa-gavel"></i></div>
+            <div class="card-content"><span>JP Center</span><small>MFG Date, Seats, Color Code, Engine, Grade, Trans</small></div>
+        </a>
+        <a href="https://carvx.jp/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Car VX">
+            <div class="icon-box" aria-hidden="true"><i class="fa-solid fa-file-invoice"></i></div>
+            <div class="card-content"><span>CarVX</span><small>Engine, Grade, Drive, Year, Trans, Fuel</small></div>
+        </a>
+        <a href="https://www.toyodiy.com/parts/q.html" target="_blank" rel="noopener noreferrer" class="card" aria-label="Toyo DIY">
+            <div class="icon-box" aria-hidden="true"><i class="fa-solid fa-gears"></i></div>
+            <div class="card-content"><span>ToyoDIY</span><small>TOYOTA • MFG Date, Power, Trans Speed, Diagrams</small></div>
+        </a>
+        <a href="https://toyota.epc-data.com/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Toyota EPC">
+            <div class="icon-box" aria-hidden="true"><i class="fa-solid fa-microchip"></i></div>
+            <div class="card-content"><span>EPC Data</span><small>TOYOTA • Engine, Grade, Trans, Color, Date</small></div>
+        </a>
+        <a href="https://imaginers.vercel.app/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Imaginers Dictionary">
+            <div class="icon-box" aria-hidden="true"><i class="fa-solid fa-language"></i></div>
+            <div class="card-content"><span>Dictionary</span><small>English <i class="fa-solid fa-arrow-right" style="font-size: 0.7em;"></i> Myanmar</small></div>
+        </a>
+    </div>
+</main>
+
+<script>
+    // --- SERVICE WORKER REGISTRATION ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker registered', reg))
+                .catch(err => console.log('Service Worker registration failed', err));
+        });
+    }
+
+    // --- INSTALL PROMPT LOGIC (Android/Desktop) ---
+    let deferredPrompt;
+    const installContainer = document.getElementById('install-btn-container');
+    const installBtn = document.getElementById('install-btn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Update UI to notify the user they can add to home screen
+        installContainer.style.display = 'block';
+    });
+
+    installBtn.addEventListener('click', (e) => {
+        // Hide our user interface that shows our A2HS button
+        installContainer.style.display = 'none';
+        // Show the prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
+            }
+            deferredPrompt = null;
+        });
+    });
+
+    // --- IOS DETECTION (Show instructions) ---
+    const isIos = () => {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        return /iphone|ipad|ipod/.test(userAgent);
+    }
+
+    // Check if it's already in standalone mode (installed)
+    const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+    if (isIos() && !isInStandaloneMode) {
+        document.getElementById('ios-install-prompt').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
