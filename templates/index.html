@@ -71,7 +71,7 @@
         }
         h1 {
             font-family: 'Syne', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             text-transform: uppercase;
             letter-spacing: -1px;
             margin: 0;
@@ -155,7 +155,20 @@
             display: block;
         }
         .card.featured::after {
-            content: "POPULAR";
+            content: "POPULAR!";
+            position: absolute;
+            top: -12px;
+            right: -10px;
+            background: var(--accent-primary);
+            color: white;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border: 2px solid var(--border-color);
+            transform: rotate(3deg);
+        }
+        .card.vpn::after {
+            content: "🛡YOU need vpn!";
             position: absolute;
             top: -12px;
             right: -10px;
@@ -246,7 +259,7 @@
             <div class="icon-box" aria-hidden="true"><i class="fa-solid fa-gavel"></i></div>
             <div class="card-content"><span>JP Center</span><small>MFG Date, Seats, Color Code, Engine, Grade, Trans</small></div>
         </a>
-        <a href="https://carvx.jp/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Car VX">
+        <a href="https://carvx.jp/" target="_blank" rel="noopener noreferrer" class="card vpn" aria-label="Car VX">
             <div class="icon-box" aria-hidden="true"><i class="fa-solid fa-file-invoice"></i></div>
             <div class="card-content"><span>CarVX</span><small>Engine, Grade, Drive, Year, Trans, Fuel</small></div>
         </a>
